@@ -17,7 +17,6 @@ def main():
      sys.exit(0)
 
   files = commands.getoutput('ls *Hmat ').split()
-  print files
   HAMILITONIAN_array = []
 
   for filename in files:
@@ -54,14 +53,11 @@ def main():
 
   # remove diagonal components for plotting purposes
 
-  print numpy.shape(HAMILITONIAN_array) 
-
   y = []
   x = []
   for imatrix in range(len(files)):
 
       y.append(HAMILITONIAN_array[imatrix][matrix_row][matrix_column])
-      print 0.9 + imatrix*.1
       x.append((0.9 + imatrix*.1)*.529177)
 
 
@@ -71,7 +67,12 @@ def main():
   pylab.ylabel('Matrix element [eV]')
   pylab.grid(True)
   pylab.title('Matrix element <'+str(matrix_row)+'|H|'+str(matrix_column)+'> vs distance')  
-  pylab.savefig('dist'+str(matrix_row)+str(matrix_column)+'.png')
+  hostname = commands.getoutput('hostname').split()
+  print hostname
+  if hostname[0] == 'cadmium':
+      pylab.show()
+  else:
+      pylab.savefig('dist'+str(matrix_row)+str(matrix_column)+'.png')
 #  im.set_interpolation('nearest')
 #  pylab.yticks([1],' ')
 #  pylab.colorbar(cax=pylab.axes([0.85,0.1,0.05,0.8]))
