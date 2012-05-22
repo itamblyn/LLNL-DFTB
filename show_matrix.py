@@ -9,6 +9,8 @@ nbasis = 1 + 3 + 5
 absoluteH = True
 removeDiagonal = True
 
+def main():
+
 if len(sys.argv) == 1:
      print 'usage: ' + sys.argv[0] + ' matrix.dat'
 
@@ -48,8 +50,6 @@ for line_counter in range(dimension):
 #    print line_counter 
 inputFile.close()
 
-#print numpy.shape(HAMILITONIAN_array)
-
 HAMILITONIAN_array = numpy.reshape(HAMILITONIAN_array,(dimension,dimension))
 HAMILITONIAN_array *= unit_scale
 
@@ -79,4 +79,7 @@ im.set_interpolation('nearest')
 #pylab.yticks([1],' ')
 pylab.colorbar(cax=pylab.axes([0.85,0.1,0.05,0.8]))
 pylab.savefig(savefile1)
+
+if __name__ == '__main__':
+    main()
 
