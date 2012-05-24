@@ -55,11 +55,16 @@ def main():
 
   y = []
   x = []
-  for imatrix in range(len(files)):
 
+  outputFile = open('dist'+str(matrix_row)+str(matrix_column)+'.png','w')
+
+  for imatrix in range(len(files)):
+      outputFile.write(str(x)+' '+str(y)+'\n')
       y.append(HAMILITONIAN_array[imatrix][matrix_row][matrix_column])
       x.append((0.9 + imatrix*.1)*.529177)
 
+
+  outputFile.close()
 
   pylab.plot(x,y)
   pylab.xlabel('Separation')
@@ -68,7 +73,6 @@ def main():
   pylab.grid(True)
   pylab.title('Matrix element <'+str(matrix_row)+'|H|'+str(matrix_column)+'> vs distance')  
   hostname = commands.getoutput('hostname').split()
-  print hostname
   if hostname[0] == 'cadmium':
       pylab.show()
   else:

@@ -7,7 +7,7 @@ natom = 3
 nbasis = 1 + 3 + 5
 
 absoluteH = True
-removeDiagonal = True
+removeDiagonal = False
 
 def main():
 
