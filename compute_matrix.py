@@ -13,13 +13,20 @@ absoluteH = False
 
 def main():
 
-  if len(sys.argv) == 1:
-       print 'usage: ' + sys.argv[0] + ' matrix.dat'
+  try:
+  # Attempt to retrieve required input from user
+    prog = sys.argv[0]
+    inputFilename = sys.argv[1]
+    
+  except IndexError:
+  # Tell the user what they need to give
+    print '\nusage: '+prog+' filename    (X.Hmat)\n'
+    # Exit the program cleanly
+    sys.exit(0)
 
-  inputFilename = sys.argv[1]
 
   # Hamiltonian  
-  inputFilename = inputFilename.split('.')[0]+'.'+inputFilename.split('.')[1]+'.Hmat'
+  inputFilename = inputFilename.split('.')[0]+'.'+inputFilename.split('.')[1]+'.Hmat' # cleaning
   inputFile = open (inputFilename,'r')
 
   file_linecounter = 0
@@ -33,34 +40,31 @@ def main():
   else:
      inputFile.seek(0) # rewind the file
      dimension = file_linecounter
-  unit_scale = 27.2116
 
-  HAMILITONIAN_array = []
+  HAMILTONIAN_array = []
 
   for line_counter in range(dimension):
 
-      HAMILITONIAN_array.append([])
+      HAMILTONIAN_array.append([])
       
       line = inputFile.readline()
       row_counter = 0
       for element in line.split():
         if (row_counter > 0) and (row_counter < len(line.split()) - 1): # skips first and last element
-            if (absoluteH == True): HAMILITONIAN_array[-1].append(np.abs(float(element)))
-            else: HAMILITONIAN_array[-1].append(float(element))
+            if (absoluteH == True): HAMILTONIAN_array[-1].append(np.abs(float(element)))
+            else: HAMILTONIAN_array[-1].append(float(element))
         row_counter += 1
   inputFile.close()
 
-  HAMILITONIAN_array = np.reshape(HAMILITONIAN_array,(dimension,dimension))
-  HAMILITONIAN_array *= unit_scale
-
-  print HAMILITONIAN_array[0][0]
+  HAMILTONIAN_array = np.reshape(HAMILTONIAN_array,(dimension,dimension))
+  unit_scale = 27.2116
+  HAMILTONIAN_array *= unit_scale
 
   inputFile.close()
 
 #####
 
   inputFilename = inputFilename.split('.')[0]+'.'+inputFilename.split('.')[1]+'.Smat'
-
   inputFile = open (inputFilename,'r')
 
   file_linecounter = 0
@@ -74,8 +78,6 @@ def main():
   else:
      inputFile.seek(0) # rewind the file
      dimension = file_linecounter
-
-  unit_scale = 1.0
 
   OVERLAP_array = []
 
@@ -92,19 +94,20 @@ def main():
   inputFile.close()
 
   OVERLAP_array = np.reshape(OVERLAP_array,(dimension,dimension))
+  
+  print HAMILTONIAN_array
+  print OVERLAP_array
 
-  COMPUTED_array = np.zeros((np.shape(HAMILITONIAN_array)[0],np.shape(HAMILITONIAN_array)[1]))
+  COMPUTED_array = np.zeros((np.shape(HAMILTONIAN_array)[0],np.shape(HAMILTONIAN_array)[1]))
 
-  K = 0.00
+  K = 1.00
 
   for i in range(np.shape(COMPUTED_array)[0]):
     for j in range(np.shape(COMPUTED_array)[1]):
         if (i == j):
-            COMPUTED_array[i][j] =  HAMILITONIAN_array[i][j]
+            COMPUTED_array[i][j] =  HAMILTONIAN_array[i][j]
         else:
-            COMPUTED_array[i][j] = -K*(1./2.)*(HAMILITONIAN_array[i][i]+HAMILITONIAN_array[j][j])*OVERLAP_array[i][j]
-
-  print COMPUTED_array[0][0]
+            COMPUTED_array[i][j] = -K*(1./2.)*(HAMILTONIAN_array[i][i]+HAMILTONIAN_array[j][j])*OVERLAP_array[i][j]
 
   if len(sys.argv) == 4:
        vmin_value = float(sys.argv[2])
@@ -127,7 +130,7 @@ def main():
 
   #####
   print 'The first natom*nvalence states are '
-  eigenvalues, eigenvectors = LA.eigh(HAMILITONIAN_array, OVERLAP_array)
+  eigenvalues, eigenvectors = LA.eigh(HAMILTONIAN_array, OVERLAP_array)
   print eigenvalues[0:natom*zatom]
 
   print 'The first natom*nvalence states are '
