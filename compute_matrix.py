@@ -95,8 +95,8 @@ def main():
 
   OVERLAP_array = np.reshape(OVERLAP_array,(dimension,dimension))
   
-  print HAMILTONIAN_array
-  print OVERLAP_array
+#  print HAMILTONIAN_array
+#  print OVERLAP_array
 
   COMPUTED_array = np.zeros((np.shape(HAMILTONIAN_array)[0],np.shape(HAMILTONIAN_array)[1]))
 
@@ -126,16 +126,23 @@ def main():
       pylab.axhline(y= nbasis*i - .5)
   im.set_interpolation('nearest')
   pylab.colorbar(cax=pylab.axes([0.85,0.1,0.05,0.8]))
-  pylab.savefig('computed.png')
+
+  # cadmium has a working version of pylab, other machines sadly do not..
+  hostname = commands.getoutput('hostname').split()
+  if hostname[0] == 'cadmium':
+      pylab.show()
+  else:
+      pylab.savefig('dist'+str(matrix_row)+str(matrix_column)+'.png')
+      pylab.savefig('computed.png')
 
   #####
   print 'The first natom*nvalence states are '
   eigenvalues, eigenvectors = LA.eigh(HAMILTONIAN_array, OVERLAP_array)
   print eigenvalues[0:natom*zatom]
-
-  print 'The first natom*nvalence states are '
-  eigenvalues, eigenvectors = LA.eigh(COMPUTED_array)
-  print eigenvalues[0:natom*zatom]
+#
+#  print 'The first natom*nvalence states are '
+#  eigenvalues, eigenvectors = LA.eigh(COMPUTED_array)
+#  print eigenvalues[0:natom*zatom]
 
 if __name__ == '__main__':
     main()
