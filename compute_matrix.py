@@ -20,7 +20,7 @@ def diagonal_screening(matrix_element):
 
 def offdiagonal_screening(matrix_element):
 
-   screened_value = 1.matrix_element
+   screened_value = 1.*matrix_element
    return screened_value
 
 
