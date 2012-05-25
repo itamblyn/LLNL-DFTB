@@ -56,15 +56,15 @@ def main():
   y = []
   x = []
 
-  outputFile = open('dist'+str(matrix_row)+str(matrix_column)+'.png','w')
+##  outputFile = open('dist'+str(matrix_row)+str(matrix_column)+'.txt','w')
 
   for imatrix in range(len(files)):
-      outputFile.write(str(x)+' '+str(y)+'\n')
+#      outputFile.write(str(x)+' '+str(y)+'\n')
       y.append(HAMILITONIAN_array[imatrix][matrix_row][matrix_column])
       x.append((0.9 + imatrix*.1)*.529177)
 
 
-  outputFile.close()
+#  outputFile.close()
 
   pylab.plot(x,y)
   pylab.xlabel('Separation')

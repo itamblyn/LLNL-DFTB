@@ -1,10 +1,13 @@
 #!/usr/bin/env python
 
-import numpy, sys
+import sys
+import numpy as np
+from scipy import linalg as LA
 import matplotlib, pylab
 
 natom = 3
 nbasis = 1 + 3 + 5
+zatom = 4
 
 absoluteH = False
 
@@ -42,13 +45,15 @@ def main():
       row_counter = 0
       for element in line.split():
         if (row_counter > 0) and (row_counter < len(line.split()) - 1): # skips first and last element
-            if (absoluteH == True): HAMILITONIAN_array[-1].append(numpy.abs(float(element)))
+            if (absoluteH == True): HAMILITONIAN_array[-1].append(np.abs(float(element)))
             else: HAMILITONIAN_array[-1].append(float(element))
         row_counter += 1
   inputFile.close()
 
-  HAMILITONIAN_array = numpy.reshape(HAMILITONIAN_array,(dimension,dimension))
+  HAMILITONIAN_array = np.reshape(HAMILITONIAN_array,(dimension,dimension))
   HAMILITONIAN_array *= unit_scale
+
+  print HAMILITONIAN_array[0][0]
 
   inputFile.close()
 
@@ -86,20 +91,20 @@ def main():
         row_counter += 1
   inputFile.close()
 
-  OVERLAP_array = numpy.reshape(OVERLAP_array,(dimension,dimension))
+  OVERLAP_array = np.reshape(OVERLAP_array,(dimension,dimension))
 
-  COMPUTED_array = numpy.zeros((numpy.shape(HAMILITONIAN_array)[0],numpy.shape(HAMILITONIAN_array)[1]))
+  COMPUTED_array = np.zeros((np.shape(HAMILITONIAN_array)[0],np.shape(HAMILITONIAN_array)[1]))
 
-  K = 2.
+  K = 0.00
 
-  for i in range(numpy.shape(COMPUTED_array)[0]):
-    for j in range(numpy.shape(COMPUTED_array)[1]):
+  for i in range(np.shape(COMPUTED_array)[0]):
+    for j in range(np.shape(COMPUTED_array)[1]):
         if (i == j):
             COMPUTED_array[i][j] =  HAMILITONIAN_array[i][j]
         else:
             COMPUTED_array[i][j] = -K*(1./2.)*(HAMILITONIAN_array[i][i]+HAMILITONIAN_array[j][j])*OVERLAP_array[i][j]
 
-  COMPUTED_array = numpy.abs(COMPUTED_array)
+  print COMPUTED_array[0][0]
 
   if len(sys.argv) == 4:
        vmin_value = float(sys.argv[2])
@@ -113,12 +118,21 @@ def main():
 
   im = pylab.imshow(COMPUTED_array,vmin=vmin_value,vmax=vmax_value)
   pylab.title('Computed Hamiltonian matrix')
-  for i in numpy.arange(1,natom,1):
+  for i in np.arange(1,natom,1):
       pylab.axvline(x= nbasis*i - .5)
       pylab.axhline(y= nbasis*i - .5)
   im.set_interpolation('nearest')
   pylab.colorbar(cax=pylab.axes([0.85,0.1,0.05,0.8]))
   pylab.savefig('computed.png')
+
+  #####
+  print 'The first natom*nvalence states are '
+  eigenvalues, eigenvectors = LA.eigh(HAMILITONIAN_array, OVERLAP_array)
+  print eigenvalues[0:natom*zatom]
+
+  print 'The first natom*nvalence states are '
+  eigenvalues, eigenvectors = LA.eigh(COMPUTED_array)
+  print eigenvalues[0:natom*zatom]
 
 if __name__ == '__main__':
     main()
