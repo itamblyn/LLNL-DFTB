@@ -10,17 +10,18 @@ nbasis = 1 + 3 + 5
 zatom = 4
 
 absoluteH = False
+plotMatrix = False
 
 MullikenApproximation = False
 
 def diagonal_screening(matrix_element):
 
-   screened_value = 2.*matrix_element
+   screened_value = matrix_element
    return screened_value
 
 def offdiagonal_screening(matrix_element):
 
-   screened_value = 1.*matrix_element
+   screened_value = matrix_element
    return screened_value
 
 
@@ -143,31 +144,34 @@ def main():
        vmin_value = COMPUTED_array.min()
        vmax_value = COMPUTED_array.max()
 
-  savefile1 = inputFilename.split('.')[0]+inputFilename.split('.')[1]+inputFilename.split('.')[2]+'.png'
 
-  im = pylab.imshow(HAMILTONIAN_array,vmin=vmin_value,vmax=vmax_value)
-  pylab.title('Hamiltonian matrix')
-  for i in np.arange(1,natom,1):
-      pylab.axvline(x= nbasis*i - .5)
-      pylab.axhline(y= nbasis*i - .5)
-  im.set_interpolation('nearest')
-  pylab.colorbar(cax=pylab.axes([0.85,0.1,0.05,0.8]))
+  if (plotMatrix == True):
+
+    savefile1 = inputFilename.split('.')[0]+inputFilename.split('.')[1]+inputFilename.split('.')[2]+'.png'
+
+    im = pylab.imshow(HAMILTONIAN_array,vmin=vmin_value,vmax=vmax_value)
+    pylab.title('Hamiltonian matrix')
+    for i in np.arange(1,natom,1):
+        pylab.axvline(x= nbasis*i - .5)
+        pylab.axhline(y= nbasis*i - .5)
+    im.set_interpolation('nearest')
+    pylab.colorbar(cax=pylab.axes([0.85,0.1,0.05,0.8]))
 
   # cadmium has a working version of pylab, other machines sadly do not..
-  hostname = commands.getoutput('hostname').split()
-#  if hostname[0] == 'cadmium':
-#      pylab.show()
-#  else:
-  pylab.savefig('computed.png')
+    hostname = commands.getoutput('hostname').split()
+    if hostname[0] == 'cadmium':
+      pylab.show()
+    else:
+      pylab.savefig('computed.png')
 
   #####
   print 'The first natom*nvalence eigenavlues from H are '
   eigenvalues, eigenvectors = LA.eigh(HAMILTONIAN_array, OVERLAP_array)
-  print eigenvalues[0:natom*zatom]
+  print np.around(eigenvalues[0:natom*zatom],2)
 
   print 'The first natom*nvalence eigenvalues from COMPUTED array are '
   eigenvalues, eigenvectors = LA.eigh(COMPUTED_array, OVERLAP_array)
-  print eigenvalues[0:natom*zatom]
+  print np.around(eigenvalues[0:natom*zatom],2)
 
 
 

@@ -6,6 +6,8 @@ import matplotlib, pylab
 natom = 3
 nbasis = 1 + 3 + 5
 
+siestaUnits = True
+
 absoluteH = True
 removeDiagonal = False
 
@@ -26,11 +28,16 @@ def main():
   header = inputFile.readline().split()
   if (header[0]) == 'Hamiltonian:': # check if this is nir's old format
       dimension = (file_linecounter - 3)/2 # 3 info lines, and both matrix and diagonal are printed
-      unit_scale = 1.0
   else:
      inputFile.seek(0) # rewind the file
      dimension = file_linecounter
-     unit_scale = 27.211383
+
+
+  if (siestaUnits == True):
+      unit_scale = 27.211383/2 # they seem to be arriving in Ry
+  else:
+      unit_scale = 27.211383 #
+
   line_counter = 0
 
   HAMILITONIAN_array = []
