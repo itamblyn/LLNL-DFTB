@@ -6,9 +6,7 @@ import matplotlib, pylab
 natom = 3
 nbasis = 1 + 3 + 5
 
-siestaUnits = True
-
-absoluteH = True
+absoluteH = False
 removeDiagonal = False
 
 def main():
@@ -32,11 +30,7 @@ def main():
      inputFile.seek(0) # rewind the file
      dimension = file_linecounter
 
-
-  if (siestaUnits == True):
-      unit_scale = 27.211383/2 # they seem to be arriving in Ry
-  else:
-      unit_scale = 27.211383 #
+  unit_scale = 27.211383 
 
   line_counter = 0
 

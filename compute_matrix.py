@@ -10,7 +10,7 @@ nbasis = 1 + 3 + 5
 zatom = 4
 
 absoluteH = False
-plotMatrix = False
+plotMatrix = True
 
 MullikenApproximation = False
 
@@ -23,7 +23,6 @@ def offdiagonal_screening(matrix_element):
 
    screened_value = matrix_element
    return screened_value
-
 
 def main():
 
@@ -109,11 +108,7 @@ def main():
 
   OVERLAP_array = np.reshape(OVERLAP_array,(dimension,dimension))
   
-#  print HAMILTONIAN_array
-#  print OVERLAP_array
-
   COMPUTED_array = np.zeros((np.shape(HAMILTONIAN_array)[0],np.shape(HAMILTONIAN_array)[1]))
-
 
   if (MullikenApproximation == True):
 
@@ -172,7 +167,6 @@ def main():
   print 'The first natom*nvalence eigenvalues from COMPUTED array are '
   eigenvalues, eigenvectors = LA.eigh(COMPUTED_array, OVERLAP_array)
   print np.around(eigenvalues[0:natom*zatom],2)
-
 
 
 if __name__ == '__main__':
