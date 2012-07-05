@@ -19,8 +19,10 @@ def main():
   files = commands.getoutput('ls *Hmat ').split()
   HAMILITONIAN_array = []
 
-  for filename in files:
+  x = []
 
+  for filename in files:
+     x.append(float(filename.split('.Hmat')[0]))
      inputFile = open (filename,'r')
 
      file_linecounter = 0
@@ -44,8 +46,6 @@ def main():
          if (row_counter > 0) and (row_counter < len(line.split()) - 1): # skips first and last element
            HAMILITONIAN_array[-1][-1].append(float(element))
          row_counter += 1
-#         print HAMILITONIAN_array[-1][-1]
-#         print line_counter 
      inputFile.close()
 
   HAMILITONIAN_array = numpy.reshape(HAMILITONIAN_array,(len(files),dimension,dimension))
@@ -54,21 +54,18 @@ def main():
   # remove diagonal components for plotting purposes
 
   y = []
-  x = []
 
 ##  outputFile = open('dist'+str(matrix_row)+str(matrix_column)+'.txt','w')
 
   for imatrix in range(len(files)):
-#      outputFile.write(str(x)+' '+str(y)+'\n')
       y.append(HAMILITONIAN_array[imatrix][matrix_row][matrix_column])
-      x.append((0.9 + imatrix*.1)*.529177)
 
 
 #  outputFile.close()
 
   pylab.plot(x,y)
-  pylab.xlabel('Separation')
-  pylab.ylim(-50,50)
+  pylab.xlabel('Separation [\AA]')
+  pylab.ylim(-20,20)
   pylab.ylabel('Matrix element [eV]')
   pylab.grid(True)
   pylab.title('Matrix element <'+str(matrix_row)+'|H|'+str(matrix_column)+'> vs distance')  
