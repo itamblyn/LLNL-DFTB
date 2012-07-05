@@ -4,6 +4,12 @@ rm -f x??
 
 # 210 atoms + 2 headers
 
+if [ ! -e lmp_traj.xyz ]; then
+    echo "There is no gen file, making it now"
+    ~/scripts/lammpstoxyz.OHNC.pl d1.xyz # if there is no .gen for the traj, make it
+fi
+
+
 split -a 3 -d -212000 lmp_traj.xyz # break file into chunks of 1000 snapshots, i.e. 1 ps
 
 lastframe=`ls x??? | tail -1`
@@ -53,4 +59,4 @@ do
 
 done
 
-#rm x???
+rm x???
