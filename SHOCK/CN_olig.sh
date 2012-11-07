@@ -2,15 +2,15 @@
 
 export OMP_NUM_THREADS=4
 
-if [ ! -d molanal ]; then
+if [ ! -d molanal.CN ]; then
   echo "There is no molanal directory"
   echo "Making one now"
-  mkdir molanal
+  mkdir molanal.CN
 fi
 
-if [ ! -e lmp_traj.gen ]; then
+if [ ! -e lmp_traj.CN.gen ]; then
     echo "There is no gen file, making it now"
-    ~/scripts/lammpstogen.OHNC.pl d1.xyz # if there is no .gen for the traj, make it
+    ~/scripts/lammpstogen.NC.pl d1.xyz # if there is no .gen for the traj, make it
 fi
 
 cd molanal
