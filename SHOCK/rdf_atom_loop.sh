@@ -19,9 +19,9 @@ if [ ! -e unwrapped.xyz ]; then
 fi
 
 
-
-#split -a 3 -d -212000 lmp_traj.xyz # break file into chunks of 1000 snapshots, i.e. 1 ps
-split -a 3 -d -212000 unwrapped.xyz # break file into chunks of 1000 snapshots, i.e. 1 ps
+echo "warning, using wrapped trajectory"
+split -a 3 -d -424000 lmp_traj.xyz # break file into chunks of 1000 snapshots, i.e. 1 ps
+#split -a 3 -d -212000 unwrapped.xyz # break file into chunks of 1000 snapshots, i.e. 1 ps
 
 lastframe=`ls x??? | tail -1`
 
@@ -37,8 +37,8 @@ fi
 
 for file in x???
 do
-  echo $file
-
+  echo -n $file" " 
+  pwd
   for atomtype1 in C H O N
   do
 
@@ -105,10 +105,13 @@ do
   echo ".dat" >> vdos.in
   echo "41.34281461881925" >> vdos.in # # 1 fs in au
   ~/git/private/VDOS/vdos.x < vdos.in >& /dev/null
-  mv VDOS.dat plot_dat/VDOS."$file".dat  
+  # convert from THz to cm-1
+  running_average.py VDOS.dat 50
+  awk '{print $1/1E-12*(8.0655E+03/2.41796E+14),$2*1E-12/(8.0655E+03/2.41796E+14)}' raverage.dat > plot_dat/VDOS."$file".dat
+  rm VDOS.dat raverage.dat
 
   mv VACF*.dat plot_dat/
 
 done
 
-#rm x???
+rm x???
